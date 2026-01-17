@@ -18,13 +18,15 @@
 }
 
 body {
+  display: flex;
   background: var(--color-background);
   margin: 0;
-  padding: 40px;
+  height: 100vh;
 }
 
 main {
   max-width: 1400px;
+  min-width: 375px;
   background: var(--color-primary);
   margin: auto;
   padding: 30px;
@@ -36,18 +38,8 @@ main {
 .layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8rem;
+  gap: 6rem;
   position: relative;
-}
-
-@media (max-width: 900px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-
-  .right-panel {
-    max-width: 100%;
-  }
 }
 
 .left-panel {
@@ -217,4 +209,40 @@ h2 {
 
 .loader.loading .robot {
   animation: pulse 1.3s infinite ease-in-out;
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+  }
+
+  .right-panel {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 880px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .right-panel {
+    max-width: 100%;
+  }
+
+  .loader {
+  display: none;
+}
+}
+
+@media (min-width: 881px) and (max-width: 1540px) {
+
+  body {
+    padding: 20px  8%;
+  }
+
+  .editable-box {
+    height: 25vh;
+    max-height: 280px;
+  }
 }

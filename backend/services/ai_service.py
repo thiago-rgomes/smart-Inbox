@@ -2,6 +2,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 HF_TOKEN = os.getenv("HF_TOKEN")
@@ -21,6 +22,8 @@ HEADERS = {
 
 MODEL = "meta-llama/Llama-3.1-8B-Instruct:novita"
 
+SIGNATURE_NAME = "Equipe de Suporte"
+
 
 def hf_chat(messages, temperature=0.2, max_tokens=300):
     payload = {
@@ -36,44 +39,73 @@ def hf_chat(messages, temperature=0.2, max_tokens=300):
         json=payload,
         timeout=60
     )
-    response.raise_for_status()
 
+    response.raise_for_status()
     return response.json()["choices"][0]["message"]["content"]
 
 
+# CLASSIFICAÇÃO DE EMAIL (FEW-SHOT)
+
 def classify_email_ai(email_text: str) -> str:
+    """
+    Classifica email como:
+    - Produtivo
+    - Improdutivo
+
+    Usa FEW-SHOT para evitar viés de sempre classificar como Produtivo.
+    """
+
     messages = [
         {
             "role": "system",
             "content": (
-                "Você é um classificador RÍGIDO de emails corporativos.\n\n"
+                "Você é um CLASSIFICADOR RÍGIDO de emails corporativos.\n\n"
 
                 "REGRA PRINCIPAL:\n"
-                "- SOMENTE classifique como PRODUTIVO se houver um PEDIDO CLARO,\n"
-                "  AÇÃO EXPLÍCITA ou SOLICITAÇÃO DIRETA.\n\n"
+                "- SOMENTE classifique como PRODUTIVO se houver um PEDIDO CLARO\n"
+                "  ou AÇÃO EXPLÍCITA solicitada.\n\n"
 
-                "PRODUTIVO (somente se existir pedido explícito):\n"
-                "- Solicitação de suporte\n"
-                "- Pergunta direta\n"
-                "- Pedido de status\n"
-                "- Relato de problema\n"
-                "- Solicitação de documento ou informação\n\n"
-
-                "IMPRODUTIVO (NÃO há pedido):\n"
-                "- Agradecimentos\n"
-                "- Felicitações\n"
-                "- Confirmações simples (\"ok\", \"recebido\")\n"
-                "- Elogios\n"
-                "- Mensagens informativas SEM pedido\n\n"
-
-                "REGRA CRÍTICA:\n"
-                "- Se NÃO houver pedido explícito → IMPRODUTIVO\n"
-                "- Se houver dúvida → IMPRODUTIVO\n\n"
+                "SE NÃO HOUVER PEDIDO → IMPRODUTIVO\n"
+                "SE HOUVER DÚVIDA → IMPRODUTIVO\n\n"
 
                 "RESPONDA APENAS COM UMA PALAVRA:\n"
                 "Produtivo OU Improdutivo"
             )
         },
+
+        {
+            "role": "user",
+            "content": "Obrigado pelo atendimento, ficou tudo certo agora."
+        },
+        {
+            "role": "assistant",
+            "content": "Improdutivo"
+        },
+        {
+            "role": "user",
+            "content": "Bom dia, segue o relatório conforme combinado."
+        },
+        {
+            "role": "assistant",
+            "content": "Improdutivo"
+        },
+        {
+            "role": "user",
+            "content": "Poderiam verificar o erro que está ocorrendo no sistema?"
+        },
+        {
+            "role": "assistant",
+            "content": "Produtivo"
+        },
+        {
+            "role": "user",
+            "content": "Preciso de ajuda para redefinir minha senha."
+        },
+        {
+            "role": "assistant",
+            "content": "Produtivo"
+        },
+
         {
             "role": "user",
             "content": email_text
@@ -98,20 +130,36 @@ def classify_email_ai(email_text: str) -> str:
 
 
 def generate_response_ai(email_text: str, classification: str) -> str:
+    """
+    Gera resposta profissional com template fixo.
+    A IA NÃO pode inventar nomes ou formatos.
+    """
+
     messages = [
         {
             "role": "system",
             "content": (
-                "Você é um assistente corporativo profissional. "
-                "Responda de forma educada, clara e objetiva."
+                "Você é um assistente corporativo profissional.\n\n"
+
+                "REGRAS ABSOLUTAS:\n"
+                "- NÃO invente nomes de pessoas\n"
+                "- NÃO assine com nomes próprios\n"
+                "- NÃO altere o formato da assinatura\n"
+                "- NÃO mencione IA\n"
+                "- NÃO use emojis\n\n"
+
+                "FORMATO OBRIGATÓRIO (SIGA EXATAMENTE):\n"
+                "Olá,\n\n"
+                "[resposta clara, curta e objetiva]\n\n"
+                "Atenciosamente,\n"
+                f"{SIGNATURE_NAME}"
             )
         },
         {
             "role": "user",
             "content": (
-                f"Classificação: {classification}\n\n"
-                f"Email:\n{email_text}\n\n"
-                "Resposta:"
+                f"Classificação do email: {classification}\n\n"
+                f"Email recebido:\n{email_text}"
             )
         }
     ]
@@ -128,5 +176,5 @@ def generate_response_ai(email_text: str, classification: str) -> str:
         return (
             "Olá,\n\n"
             "Recebemos sua mensagem e ela será analisada pela equipe.\n\n"
-            "Atenciosamente."
+            f"Atenciosamente,\n{SIGNATURE_NAME}"
         )

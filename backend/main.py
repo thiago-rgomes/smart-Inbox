@@ -4,8 +4,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import os
 
-from services.file_reader import extract_text
-from services.ai_service import classify_email_ai, generate_response_ai
+from backend.services.file_reader import extract_text
+from backend.services.ai_service import classify_email_ai, generate_response_ai
 
 
 app = FastAPI()

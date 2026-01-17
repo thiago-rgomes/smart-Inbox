@@ -1,21 +1,57 @@
+:root {
+  --color-primary: #1F2937;
+  --color-secondary: linear-gradient(
+    to bottom right,
+    rgba(139, 92, 246, 0.1),
+    rgba(168, 85, 247, 0.1)
+  );
+
+  --color-background: #111827;
+
+  --color-text: #FFFFFF;
+  --color-text-muted: #D1D5DB;
+}
+
 * {
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
-  background: #f4f6f8;
+  background: var(--color-background);
   margin: 0;
   padding: 40px;
 }
 
 main {
-  max-width: 700px;
-  background: #ffffff;
+  max-width: 1400px;
+  background: var(--color-primary);
   margin: auto;
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 0 15px rgba(0,0,0,0.08);
+  color: var(--color-text);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8rem;
+  position: relative;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .right-panel {
+    max-width: 100%;
+  }
+}
+
+.left-panel {
+  max-width: 720px;
 }
 
 h1 {
@@ -23,63 +59,162 @@ h1 {
 }
 
 .subtitle {
-  color: #666;
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
   margin-bottom: 25px;
 }
 
 label {
   font-weight: bold;
   display: block;
-  margin-top: 15px;
 }
 
-textarea {
-  width: 100%;
-  min-height: 150px;
-  padding: 10px;
-  margin-top: 8px;
-  resize: vertical;
+.editable-box {
+  height: 320px;
+  background: var(--color-secondary);
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  outline: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 6px;
 }
 
-input[type="file"] {
+.editable-box:empty::before {
+  content: attr(data-placeholder);
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+}
+
+.file-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
   margin-top: 10px;
 }
 
-button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  background-color: #2d6cdf;
-  color: #fff;
-  border: none;
+#fileBtn {
+  width: fit-content;
+  padding: 10px 15px;
+  background-color: #4b5563;
+  color: var(--color-text);
   border-radius: 5px;
-  font-size: 16px;
   cursor: pointer;
+  
 }
 
-button:hover {
-  background-color: #1f56b8;
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #1f2933;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.file-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+#removeFile {
+  background: transparent;
+  border: none;
+  color: #f87171;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+#removeFile:hover {
+  color: #ef4444;
+}
+
+#submitBtn {
+  width: 100%;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  background: linear-gradient(to right, #7c3aed, #f97316);
+  color: var(--color-text);
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+  margin-top: 40px;
+}
+
+#submitBtn:hover {
+  opacity: 0.9;
+}
+
+#submitBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 .divider {
   text-align: center;
+  font-size: 1.5rem;
   margin: 15px 0;
-  color: #999;
+  color: var(--color-text);
 }
 
-#result-container {
-  margin-top: 30px;
-  border-top: 1px solid #ddd;
-  padding-top: 20px;
+h2 {
+    margin-top: 0;
+    margin-bottom: 31px;
 }
 
 .response-box {
-  background: #f1f3f5;
+  background: var(--color-secondary);
   padding: 15px;
   border-radius: 5px;
   white-space: pre-wrap;
+  font-size: 1.1rem;
 }
 
 .hidden {
   display: none;
+}
+
+.loader {
+  position: absolute;
+  right: 18%;
+  top: 86%;
+  z-index:1000;
+}
+
+.robot-wrapper {
+  position: relative;
+}
+
+.bulb {
+  position: absolute;
+  top: -32%;
+  right: 34%;
+  width: 36px;
+  animation: glow 1s infinite ease-in-out;
+}
+
+.robot {
+  width: 120px;
+}
+
+@keyframes glow {
+  0% { opacity: 0.6; transform: scale(0.98); }
+  50% { opacity: 0.8; transform: scale(1.03); }
+  100% { opacity: 0.6; transform: scale(0.98); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.loader.loading .robot {
+  animation: pulse 1.3s infinite ease-in-out;
 }

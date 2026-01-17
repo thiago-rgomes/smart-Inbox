@@ -79,7 +79,7 @@ form.addEventListener("submit", async (e) => {
   }, 3100);
 
   try {
-    const response = await fetch("http://localhost:8000/process-email", {
+    const response = await fetch("/process-email", {
       method: "POST",
       body: formData,
     });

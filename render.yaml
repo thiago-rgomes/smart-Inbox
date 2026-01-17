@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: email-ai-app
+    runtime: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: bash start.sh
+    envVars:
+      - key: HF_TOKEN
+        sync: false

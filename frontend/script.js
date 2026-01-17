@@ -9,6 +9,9 @@ const fileInput = document.getElementById('fileInput');
 const fileName = document.getElementById('fileName');
 const fileInfo = document.getElementById("fileInfo");
 const removeFileBtn = document.getElementById("removeFile");
+const errorBubble = document.getElementById("errorBubble");
+const bubbleText = errorBubble.querySelector(".bubble-text");
+
 
 let bulbTimeout;
 
@@ -26,10 +29,22 @@ fileInput.addEventListener("change", () => {
 });
 
 removeFileBtn.addEventListener("click", () => {
-  fileInput.value = ""; // limpa o input
+  fileInput.value = "";
   fileInfo.classList.add("hidden");
   fileName.textContent = "";
 });
+
+function showError(message) {
+  bubbleText.textContent = message;
+  errorBubble.classList.add("active");
+  bubbleText.classList.add("active");
+}
+
+function hideError() {
+  bubbleText.classList.remove("active");
+  errorBubble.classList.remove("active");
+  bubbleText.textContent = "";
+}
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -38,12 +53,12 @@ form.addEventListener("submit", async (e) => {
   const fileInput = document.getElementById("fileInput").files[0];
 
   if (!text && !fileInput) {
-    alert("Informe um texto ou faça upload de um arquivo.");
+    showError("Informe um texto ou envie um arquivo.");
     return;
   }
 
   if (text && fileInput) {
-    alert("Por favor, forneça apenas UMA opção.");
+    showError("Escolhe apenas uma opção.");
     return;
   }
 
@@ -51,11 +66,13 @@ form.addEventListener("submit", async (e) => {
   if (text) formData.append("text", text);
   if (fileInput) formData.append("file", fileInput);
 
+  hideError();
   bulb.classList.add("hidden");
   loader.classList.add("loading");
   submitBtn.disabled = true;
   submitBtn.textContent = "Processando...";
   resultDiv.classList.add("hidden");
+
 
   bulbTimeout = setTimeout(() => {
     bulb.classList.remove("hidden");
@@ -78,7 +95,7 @@ form.addEventListener("submit", async (e) => {
 
     resultDiv.classList.remove("hidden");
   } catch (error) {
-    alert("Erro ao comunicar com o backend.");
+    showError("Erro ao comunicar com o backend.");
     console.error(error);
   } finally {
     clearTimeout(bulbTimeout);

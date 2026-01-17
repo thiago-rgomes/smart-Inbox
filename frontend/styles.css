@@ -1,5 +1,5 @@
 :root {
-  --color-primary: #1F2937;
+  --color-primary: #1f2937;
   --color-secondary: linear-gradient(
     to bottom right,
     rgba(139, 92, 246, 0.1),
@@ -8,8 +8,8 @@
 
   --color-background: #111827;
 
-  --color-text: #FFFFFF;
-  --color-text-muted: #D1D5DB;
+  --color-text: #ffffff;
+  --color-text-muted: #d1d5db;
 }
 
 * {
@@ -31,7 +31,7 @@ main {
   margin: auto;
   padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.08);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
   color: var(--color-text);
 }
 
@@ -93,7 +93,6 @@ label {
   color: var(--color-text);
   border-radius: 5px;
   cursor: pointer;
-  
 }
 
 .file-info {
@@ -156,8 +155,8 @@ label {
 }
 
 h2 {
-    margin-top: 0;
-    margin-bottom: 31px;
+  margin-top: 0;
+  margin-bottom: 31px;
 }
 
 .response-box {
@@ -176,7 +175,7 @@ h2 {
   position: absolute;
   right: 18%;
   top: 86%;
-  z-index:1000;
+  z-index: 1000;
 }
 
 .robot-wrapper {
@@ -196,15 +195,30 @@ h2 {
 }
 
 @keyframes glow {
-  0% { opacity: 0.6; transform: scale(0.98); }
-  50% { opacity: 0.8; transform: scale(1.03); }
-  100% { opacity: 0.6; transform: scale(0.98); }
+  0% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .loader.loading .robot {
@@ -231,18 +245,58 @@ h2 {
   }
 
   .loader {
-  display: none;
-}
+    display: none;
+  }
 }
 
 @media (min-width: 881px) and (max-width: 1540px) {
-
   body {
-    padding: 20px  8%;
+    padding: 20px 8%;
   }
 
   .editable-box {
     height: 25vh;
     max-height: 280px;
   }
+}
+
+.bubble {
+  position: absolute;
+  top: -95px;
+  left: 90%;
+  transform: translateX(-50%);
+  width: 230px;
+  height: 130px;
+
+  background-image: url("./assets/bubble.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px 22px;
+  text-align: center;
+
+  z-index: 10;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.bubble-text {
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  line-height: 1.2;
+  font-weight: 500;
+  max-width: 100px;
+  margin-top: -5%;
+}
+
+.active {
+  opacity: 1;
+  visibility: visible;
 }

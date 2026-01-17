@@ -5,20 +5,19 @@ const responseBox = document.getElementById("suggestedResponse");
 const loader = document.querySelector(".loader");
 const submitBtn = document.getElementById("submitBtn");
 const bulb = document.querySelector(".bulb");
-const fileInput = document.getElementById('fileInput');
-const fileName = document.getElementById('fileName');
+const fileInput = document.getElementById("fileInput");
+const fileName = document.getElementById("fileName");
 const fileInfo = document.getElementById("fileInfo");
 const removeFileBtn = document.getElementById("removeFile");
 const errorBubble = document.getElementById("errorBubble");
 const bubbleText = errorBubble.querySelector(".bubble-text");
 
-
 let bulbTimeout;
 
-fileInput.addEventListener('change', () => {
+fileInput.addEventListener("change", () => {
   fileName.textContent = fileInput.files.length
     ? fileInput.files[0].name
-    : 'Nenhum arquivo selecionado';
+    : "Nenhum arquivo selecionado";
 });
 
 fileInput.addEventListener("change", () => {
@@ -49,7 +48,9 @@ function hideError() {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const text = document.getElementById("emailText").innerText;
+  const rawText = document.getElementById("emailText").innerText;
+  const text = rawText.trim();
+
   const fileInput = document.getElementById("fileInput").files[0];
 
   if (!text && !fileInput) {
@@ -72,7 +73,6 @@ form.addEventListener("submit", async (e) => {
   submitBtn.disabled = true;
   submitBtn.textContent = "Processando...";
   resultDiv.classList.add("hidden");
-
 
   bulbTimeout = setTimeout(() => {
     bulb.classList.remove("hidden");
